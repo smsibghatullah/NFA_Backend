@@ -1,0 +1,17 @@
+/* light green : #198754 */
+/* dark green : #104122 */
+.my-sidebar-class{
+    background-color: #104122!important;
+}
+.my-logo-class{
+    background-color: #ffffff!important;
+}
+.my-text-color{
+    color: #198754 !important;
+}
+.my-btn-color{
+    background-color: #198754 !important;
+}
+.db-logo{
+    width: 85%;
+}
