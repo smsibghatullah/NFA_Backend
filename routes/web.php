@@ -35,6 +35,12 @@ Route::middleware('auth:custom')->group(function () {
     Route::post('/candidates/store', [CandidateController::class, 'store'])->name('candidates.store');
     Route::post('/candidates/manual-store', [CandidateController::class, 'manualStore'])->name('candidates.manual.store');
     Route::get('/candidates/show', [CandidateController::class, 'show'])->name('candidates.show');
+    Route::delete('/downloads/delete/{id}', [DownloadSectionController::class, 'destroy'])
+    ->name('downloads.delete');
+    Route::delete('/documents/delete/{id}', [DocumentController::class, 'destroy'])
+    ->name('documents.delete');
+
+
     // Candidates
     Route::get('/candidates', [CandidateController::class, 'show'])->name('candidates.show');
     Route::get('/candidates/edit/{id}', [CandidateController::class, 'edit'])->name('candidates.edit');

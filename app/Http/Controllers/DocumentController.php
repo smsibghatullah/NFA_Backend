@@ -30,15 +30,32 @@ class DocumentController extends Controller
         return redirect()->route('documents.show')->with('success', 'Document uploaded successfully');
     }
 
-    public function show()
-    {
-        $documents = Document::latest()->get();
-        return view('documents.showdocument', compact('documents'));
-    }
+   public function show()
+{
+    $documents = Document::latest()->paginate(10);
+    return view('documents.showdocument', compact('documents'));
+}
 
     public function view($id)
     {
         $document = Document::findOrFail($id);
         return view('documents.viewdocument', compact('document'));
     }
+    public function destroy($id)
+{
+    $document = Document::findOrFail($id);
+
+    // delete file
+    $filePath = public_path('uploads/documents/' . $document->file);
+    if (file_exists($filePath)) {
+        unlink($filePath);
+    }
+
+    // delete record
+    $document->delete();
+
+    return redirect()->route('documents.show')
+        ->with('success', 'Document deleted successfully');
+}
+
 }

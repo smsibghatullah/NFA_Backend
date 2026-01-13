@@ -22,18 +22,36 @@
                 <tbody>
                     @foreach($downloads as $item)
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
+<td>
+    {{ ($downloads->currentPage() - 1) * $downloads->perPage() + $loop->iteration }}
+</td>
                         <td>{{ $item->name }}</td>
-                        <td>
-                            <a href="{{ route('downloads.view',$item->id) }}"
-                               class="badge bg-success px-3 py-2 text-decoration-none">
-                                VIEW
-                            </a>
-                        </td>
+                       <td>
+    <a href="{{ route('downloads.view',$item->id) }}"
+       class="badge bg-success px-3 py-2 text-decoration-none">
+        VIEW
+    </a>
+
+    <form action="{{ route('downloads.delete',$item->id) }}"
+          method="POST"
+          style="display:inline-block"
+          onsubmit="return confirm('Are you sure you want to delete this?')">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="badge bg-danger border-0 px-3 py-2">
+            DELETE
+        </button>
+    </form>
+</td>
+
                     </tr>
                     @endforeach
                 </tbody>
             </table>
+            <div class="mt-3">
+    {{ $downloads->appends(request()->query())->links('pagination::bootstrap-5') }}
+</div>
+
         </div>
     </div>
 </div>

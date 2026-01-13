@@ -66,7 +66,7 @@ class AuthController extends Controller
             return redirect('/login');
         }
 
-        return view('Dashboard.index', [
+        return view('Dashboard.home', [
             'user' => LaravelAuth::guard('custom')->user()
         ]);
     }

@@ -4,9 +4,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Dashboard</title>
+  <title>National Forensics Agency | Dashboard</title>
 
   <!-- Google Font: Source Sans Pro -->
+  <link rel="shortcut icon" href="{{ asset('img/NFA-logo.svg') }}" type="image/x-icon">
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -42,7 +43,7 @@
           <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-          <a href="index3.html" class="nav-link">Home</a>
+          <a href="{{ route('dashboard') }}" class="nav-link">Home</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
           {{-- <a href="#" class="nav-link">Contact</a> --}}
@@ -139,7 +140,6 @@
                 <i class="nav-icon fas fa-home"></i>
                 <p>
                   Home
-                  {{-- <i class="right fas fa-angle-left"></i> --}}
                 </p>
               </a>
 
@@ -218,7 +218,26 @@
                     <p>View Job Posts</p>
                   </a>
                 </li>
+                <li class="nav-item ">
+                  <a href="{{ route('nfa-users.index') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>
+                      Nfa Users
+                      {{-- <i class="right fas fa-angle-left"></i> --}}
+                    </p>
+                  </a>
 
+                </li>
+                <li class="nav-item ">
+                  <a href="{{ route('applications.show') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>
+                      Job Applications
+                      {{-- <i class="right fas fa-angle-left"></i> --}}
+                    </p>
+                  </a>
+
+                </li>
               </ul>
 
             </li>
@@ -250,26 +269,7 @@
 
               </ul>
             </li>
-             <li class="nav-item ">
-              <a href="{{ route('nfa-users.index') }}" class="nav-link">
-                <i class="nav-icon fas fa-user-circle"></i>
-                <p>
-                  Nfa Users
-                  {{-- <i class="right fas fa-angle-left"></i> --}}
-                </p>
-              </a>
 
-            </li>
-            <li class="nav-item ">
-              <a href="{{ route('applications.show') }}" class="nav-link">
-                <i class="nav-icon fas fa-bars"></i>
-                <p>
-                  Job Applications
-                  {{-- <i class="right fas fa-angle-left"></i> --}}
-                </p>
-              </a>
-
-            </li>
           </ul>
         </nav>
         <!-- /.sidebar-menu -->
@@ -298,7 +298,7 @@
       <!-- Main content -->
       <section class="content">
         <div class="container-fluid">
-
+          
           <!-- /.row -->
           <!-- Main row -->
           <div class="row">

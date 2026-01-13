@@ -20,20 +20,43 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($documents as $doc)
+                    @forelse($documents as $doc)
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
+                        <td>
+                            {{ ($documents->currentPage() - 1) * $documents->perPage() + $loop->iteration }}
+                        </td>
                         <td>{{ $doc->name }}</td>
                         <td>
                             <a href="{{ route('documents.view',$doc->id) }}"
-                               class="badge bg-success px-3 py-2 text-decoration-none">
+                                class="badge bg-success px-3 py-2 text-decoration-none">
                                 VIEW
                             </a>
+
+                            <form action="{{ route('documents.delete',$doc->id) }}" method="POST"
+                                style="display:inline-block"
+                                onsubmit="return confirm('Are you sure you want to delete this?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="badge bg-danger border-0 px-3 py-2">
+                                    DELETE
+                                </button>
+                            </form>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="3" class="text-center text-muted">
+                            No documents found
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
+
             </table>
+            <div class="mt-3">
+                {{ $documents->appends(request()->query())->links('pagination::bootstrap-5') }}
+            </div>
+
         </div>
     </div>
 </div>

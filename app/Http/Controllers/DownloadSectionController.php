@@ -43,15 +43,32 @@ class DownloadSectionController extends Controller
             ->with('success', 'Download form uploaded successfully');
     }
 
-    public function show()
-    {
-        $downloads = Download::latest()->get();
-        return view('downloadsection.showdownload', compact('downloads'));
-    }
+   public function show()
+{
+    $downloads = Download::latest()->paginate(10); // 10 per page
+    return view('downloadsection.showdownload', compact('downloads'));
+}
 
     public function view($id)
     {
         $download = Download::findOrFail($id);
         return view('downloadsection.viewdownload', compact('download'));
     }
+    public function destroy($id)
+{
+    $download = Download::findOrFail($id);
+
+    // file delete from folder
+    $filePath = public_path('uploads/downloads/' . $download->file);
+    if (file_exists($filePath)) {
+        unlink($filePath);
+    }
+
+    // delete record
+    $download->delete();
+
+    return redirect()->route('downloads.show')
+        ->with('success', 'Download deleted successfully');
+}
+
 }
