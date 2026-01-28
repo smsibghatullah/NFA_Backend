@@ -44,12 +44,14 @@
                         <option value="Intermediate">Intermediate</option>
                         <option value="Bachelors">Bachelors</option>
                         <option value="Master">Master</option>
+                        <option value="PhD">PhD</option>
+
                     </select>
                 </div>
 
                 <div class="form-group mb-4">
                     <label class="my-text-color fw-bold">Required Experience (in months or false)</label>
-                    <input type="text" name="required_experience" class="form-control" value="false"
+                    <input type="text" name="required_experience" class="form-control" value="0"
                         placeholder="e.g., 12 or false">
                 </div>
                 <div class="form-group mb-3">

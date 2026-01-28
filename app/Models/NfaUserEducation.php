@@ -8,18 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class NfaUserEducation extends Model
 {
     use HasFactory;
+
     protected $table = 'nfa_user_educations';
 
     protected $fillable = [
-        'profile_id', 'institution_name', 'degree', 'field_of_study',
-        'start_date', 'end_date', 'grade', 'description'
+        'institution_name',
+        'degree',
+        'field_of_study',
+        'start_date',
+        'end_date',
+        'grade',
+        'description'
     ];
 
-public function profile()
-{
-    return $this->belongsTo(NfaUserProfile::class, 'profile_id', 'id');
+    public function profile()
+    {
+        return $this->belongsTo(NfaUserProfile::class, 'profile_id', 'id');
+    }
 }
-
-
-}
-

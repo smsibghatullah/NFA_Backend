@@ -6,11 +6,44 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\JobListing;
 use App\Models\NfaUser;
+use App\Models\NfaUserProfile;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class EligibilityApiController extends Controller
 {
+    private function getEducationLevel($degree)
+    {
+        $degree = strtolower($degree);
+
+        if (str_contains($degree, 'phd')) {
+            return 5;
+        }
+
+        if (str_contains($degree, 'master') || str_contains($degree, 'ms') || str_contains($degree, 'msc')) {
+            return 4;
+        }
+
+        if (
+            str_contains($degree, 'bachelor') ||
+            str_contains($degree, 'bs') ||
+            str_contains($degree, 'bsc') ||
+            str_contains($degree, 'ba')
+        ) {
+            return 3;
+        }
+
+        if (str_contains($degree, 'intermediate') || str_contains($degree, 'inter')) {
+            return 2;
+        }
+
+        if (str_contains($degree, 'matric')) {
+            return 1;
+        }
+
+        return 0;
+    }
+
     public function checkEligibility(Request $request)
     {
         $authUser = Auth::user(); // default User model
@@ -20,85 +53,125 @@ class EligibilityApiController extends Controller
         $profile = $nfaUser?->profile()
             ->with('educations', 'workHistories')
             ->first();
+
         if (!$profile) {
             return response()->json([
                 'status' => false,
-                'message' => 'Profile not found. Please complete your profile first.'
+                'message' => 'Profile not found'
             ], 400);
         }
 
-        // ✅ Job ID from request body
-        $jobId = $request->input('job_id');
-        if (!$jobId) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Job ID is required.'
-            ], 400);
-        }
-
-        $job = JobListing::find($jobId);
+        $job = JobListing::find($request->job_id);
         if (!$job) {
             return response()->json([
                 'status' => false,
-                'message' => 'Job not found.'
+                'message' => 'Job not found'
             ], 404);
         }
 
         $errors = [];
 
-        // ===== Education Check =====
+        /* =======================
+       🎓 EDUCATION CHECK
+    ========================*/
+
+        $educationOrder = [
+            'matric'        => 1,
+            'intermediate'  => 2,
+            'bachelors'     => 3,
+            'masters'       => 4,
+            'phd'           => 5,
+        ];
+
         if ($job->required_education) {
-            $degreeHierarchy = [
-                'matric' => 1,
-                'intermediate' => 2,
-                'bachelors' => 3,
-                'masters' => 4,
-            ];
 
-            $requiredLevel = $degreeHierarchy[strtolower($job->required_education)] ?? 0;
+            $requiredLevel = $this->getEducationLevel($job->required_education);
+            $userHighestLevel = 0;
 
-            // Check if user has at least required level
-            $hasEducation = $profile->educations->contains(function ($edu) use ($degreeHierarchy, $requiredLevel) {
-                $userLevel = $degreeHierarchy[strtolower($edu->degree)] ?? 0;
-                return $userLevel >= $requiredLevel;
-            });
+            foreach ($profile->educations as $edu) {
+                $level = $this->getEducationLevel($edu->degree);
+                if ($level > $userHighestLevel) {
+                    $userHighestLevel = $level;
+                }
+            }
 
-            if (!$hasEducation) {
-                $errors[] = "You do not meet the required education: {$job->required_education}.";
+            if ($userHighestLevel < $requiredLevel) {
+                $errors[] = "Required education: {$job->required_education}. You do not meet this requirement.";
             }
         }
 
-        // ===== Experience Check =====
-        if ($job->required_experience && $job->required_experience !== 'false') {
-            $totalExperienceMonths = 0;
+        /* =======================
+       🎂 AGE / DOB CHECK
+    ========================*/
+
+        if ($job->min_age || $job->max_age) {
+
+            $age = Carbon::parse($profile->date_of_birth)->age;
+
+            if ($job->min_age && $age < $job->min_age) {
+                $errors[] = "Minimum age required is {$job->min_age}. Your age is {$age}.";
+            }
+
+            if ($job->max_age && $age > $job->max_age) {
+                $errors[] = "Maximum age allowed is {$job->max_age}. Your age is {$age}.";
+            }
+        }
+
+        /* =======================
+       💼 EXPERIENCE CHECK
+    ========================*/
+
+        if ($job->required_experience) {
+
+            $totalMonths = 0;
 
             foreach ($profile->workHistories as $work) {
+
+                if (!$work->start_date) {
+                    continue;
+                }
+
                 $start = Carbon::parse($work->start_date);
-                $end = $work->end_date ? Carbon::parse($work->end_date) : Carbon::now();
-                $totalExperienceMonths += $start->diffInMonths($end);
+
+                // Agar currently working hai OR end_date null
+                if ($work->currently_working || !$work->end_date) {
+                    $end = Carbon::now();
+                } else {
+                    $end = Carbon::parse($work->end_date);
+                }
+
+                if ($end->greaterThan($start)) {
+                    $totalMonths += $start->diffInMonths($end);
+                }
             }
 
-            $requiredMonths = (int) $job->required_experience;
-            if ($totalExperienceMonths < $requiredMonths) {
-                $years = floor($totalExperienceMonths / 12);
-                $months = $totalExperienceMonths % 12;
-                $errors[] = "You have {$years} years and {$months} months experience. Required: " . floor($requiredMonths / 12) . " years.";
+            if ($totalMonths < $job->required_experience) {
+
+                $years  = intdiv($totalMonths, 12);
+                $months = $totalMonths % 12;
+
+                $reqYears = intdiv($job->required_experience, 12);
+
+                $errors[] = "Required experience: {$reqYears} years. You have {$years} years {$months} months.";
             }
         }
 
-        // ===== Result =====
-        if (count($errors) > 0) {
+        /* =======================
+       ✅ FINAL RESPONSE
+    ========================*/
+
+        if (!empty($errors)) {
             return response()->json([
-                'status' => false,
+                'status'   => false,
                 'eligible' => false,
-                'reasons' => $errors
-            ], 200);
+                'reasons'  => $errors
+            ]);
         }
 
         return response()->json([
-            'status' => true,
+            'status'   => true,
             'eligible' => true,
-            'message' => 'You are eligible for this job.'
-        ], 200);
+            'message'  => 'You are eligible for this job'
+        ]);
     }
 }

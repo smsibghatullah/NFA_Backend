@@ -19,7 +19,7 @@ use App\Http\Controllers\Api\NfaUserProfileApiController;
 | Here is where you can register API routes for your application. These
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "api" middleware group. Make something great!
-|
+| 
 */
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -36,7 +36,7 @@ Route::post('nfauser/login', [NfaUserApiController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     // Logged-in user ka profile fetch
-    Route::get('nfauser/profile', [NfaUserProfileApiController::class, 'showProfile']);
+    Route::get('nfauser/profile', action: [NfaUserProfileApiController::class, 'showProfile']);
 
     // Profile create ya update
     Route::post('nfauser/profile', [NfaUserProfileApiController::class, 'saveProfile']);

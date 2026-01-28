@@ -5,19 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class NfaUserWorkHistory extends Model
+class NfaUserSkill extends Model
 {
     use HasFactory;
 
-    protected $table = 'nfa_user_work_histories';
+    protected $table = 'nfa_user_skills';
 
     protected $fillable = [
-        'company_name',
-        'job_title',
-        'start_date',
-        'end_date',
-        'responsibilities',
-        'is_current'
+        'name',
+        'description'
     ];
 
     public function profile()

@@ -29,7 +29,7 @@ class JobListingController extends Controller
             'application_deadline' => 'required|date',
             'number_of_positions' => 'required|integer|min:1',
             'salary_range' => 'nullable|string|max:50',
-            'required_education' => 'required|in:Matric,Intermediate,Bachelors,Master',
+'required_education' => 'required|string|max:100',
             'required_experience' => 'required|string', // number in months or 'false'
             'responsibilities' => 'nullable|string',
             'additional_info' => 'nullable|string',
@@ -55,7 +55,7 @@ class JobListingController extends Controller
             'application_deadline' => 'required|date',
             'number_of_positions' => 'required|integer|min:1',
             'salary_range' => 'nullable|string|max:50',
-            'required_education' => 'required|in:Matric,Intermediate,Bachelors,Master',
+'required_education' => 'required|string|max:100',
             'required_experience' => 'required|string',
             'responsibilities' => 'nullable|string',
             'additional_info' => 'nullable|string',
