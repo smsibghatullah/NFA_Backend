@@ -33,13 +33,14 @@
 
                 <div class="form-group mb-3">
                     <label class="my-text-color fw-bold">Salary Range</label>
-                    <input type="text" name="salary_range" class="form-control" placeholder="e.g., 50000-70000 PKR">
+                    <input type="number" name="salary_range" class="form-control" placeholder="e.g., 50000-70000 PKR">
                 </div>
 
 
                 <div class="form-group mb-3">
                     <label class="my-text-color fw-bold">Required Education</label>
                     <select name="required_education" class="form-control">
+                        <option value="">-- Select Level of Education --</option>
                         <option value="Matric">Matric</option>
                         <option value="Intermediate">Intermediate</option>
                         <option value="Bachelors">Bachelors</option>
@@ -50,8 +51,8 @@
                 </div>
 
                 <div class="form-group mb-4">
-                    <label class="my-text-color fw-bold">Required Experience (in months or false)</label>
-                    <input type="text" name="required_experience" class="form-control" value="0"
+                    <label class="my-text-color fw-bold">Required Experience (in months)</label>
+                    <input type="number" name="required_experience" class="form-control" value="0"
                         placeholder="e.g., 12 or false">
                 </div>
                 <div class="form-group mb-3">

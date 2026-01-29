@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth as LaravelAuth;
+use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
 {
@@ -44,21 +45,40 @@ class AuthController extends Controller
     }
 
     // Handle login
-    public function login(Request $request) {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+  public function login(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+        'g-recaptcha-response' => 'required'
+    ]);
 
-        $user = Auth::where('email', $request->email)->first();
+    // 🔐 Verify Google reCAPTCHA
+    $captchaResponse = Http::asForm()->post(
+        'https://www.google.com/recaptcha/api/siteverify',
+        [
+            'secret'   => env('RECAPTCHA_SECRET_KEY'),
+            'response' => $request->input('g-recaptcha-response'),
+            'remoteip' => $request->ip(),
+        ]
+    );
 
-        if ($user && Hash::check($request->password, $user->password)) {
-            LaravelAuth::guard('custom')->login($user);
-            return redirect('/dashboard');
-        }
-
-        return back()->withErrors(['email' => 'Invalid credentials'])->withInput();
+    if (!($captchaResponse->json()['success'] ?? false)) {
+        return back()
+            ->withErrors(['captcha' => 'Captcha verification failed'])
+            ->withInput();
     }
+
+    $user = Auth::where('email', $request->email)->first();
+
+    if ($user && Hash::check($request->password, $user->password)) {
+        LaravelAuth::guard('custom')->login($user);
+        return redirect('/dashboard');
+    }
+
+    return back()->withErrors(['email' => 'Invalid credentials'])->withInput();
+}
+
 
     // Dashboard
     public function dashboard() {

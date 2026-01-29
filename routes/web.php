@@ -39,6 +39,10 @@ Route::middleware('auth:custom')->group(function () {
     ->name('downloads.delete');
     Route::delete('/documents/delete/{id}', [DocumentController::class, 'destroy'])
     ->name('documents.delete');
+Route::put('/candidates/{id}', [CandidateController::class, 'update'])
+    ->name('candidates.update');
+
+Route::put('/job-listings/{jobListing}', [JobListingController::class, 'update'])->name('job-listings.update');
 
 
     // Candidates

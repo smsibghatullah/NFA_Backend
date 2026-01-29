@@ -28,9 +28,9 @@ class JobListingController extends Controller
             'location' => 'nullable|string|max:255',
             'application_deadline' => 'required|date',
             'number_of_positions' => 'required|integer|min:1',
-            'salary_range' => 'nullable|string|max:50',
+'salary_range' => 'nullable|numeric|min:0',
 'required_education' => 'required|string|max:100',
-            'required_experience' => 'required|string', // number in months or 'false'
+'required_experience' => 'required|integer|min:0',
             'responsibilities' => 'nullable|string',
             'additional_info' => 'nullable|string',
         ]);
@@ -50,16 +50,17 @@ class JobListingController extends Controller
     public function update(Request $request, JobListing $jobListing)
     {
         $request->validate([
-            'job_title' => 'required|string|max:255',
-            'location' => 'nullable|string|max:255',
-            'application_deadline' => 'required|date',
-            'number_of_positions' => 'required|integer|min:1',
-            'salary_range' => 'nullable|string|max:50',
-'required_education' => 'required|string|max:100',
-            'required_experience' => 'required|string',
-            'responsibilities' => 'nullable|string',
-            'additional_info' => 'nullable|string',
-        ]);
+    'job_title' => 'required|string|max:255',
+    'location' => 'nullable|string|max:255',
+    'application_deadline' => 'required|date',
+    'number_of_positions' => 'required|integer|min:1',
+    'salary_range' => 'nullable|numeric|min:0',
+    'required_education' => 'required|string|max:100',
+    'required_experience' => 'required|integer|min:0',
+    'responsibilities' => 'nullable|string',
+    'additional_info' => 'nullable|string',
+]);
+
 
         $jobListing->update($request->all());
 
