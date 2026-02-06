@@ -136,7 +136,7 @@
             <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
             <li class="nav-item ">
-              <a href="{{ route('dashboard') }}" class="nav-link">
+              <a href="{{ route('generalinfo.index') }}" class="nav-link">
                 <i class="nav-icon fas fa-home"></i>
                 <p>
                   Home
@@ -269,7 +269,47 @@
 
               </ul>
             </li>
+            <li class="nav-item ">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-file-alt"></i>
+                <p>
+                  Posts Section
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{{ route('about.index') }}"
+                    class="nav-link {{ request()->routeIs('about.index') ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>About post</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{ route('services.index') }}"
+                    class="nav-link {{ request()->routeIs('services.index') ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Our Services</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{ route('forensic.index') }}"
+                    class="nav-link {{ request()->routeIs('forensic.index') ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Forensic Posts</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{ route('training.index') }}"
+                    class="nav-link {{ request()->routeIs('training.index') ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Training & Education</p>
+                  </a>
+                </li>
 
+
+              </ul>
+            </li>
           </ul>
         </nav>
         <!-- /.sidebar-menu -->

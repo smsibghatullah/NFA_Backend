@@ -15,3 +15,25 @@
 .db-logo{
     width: 85%;
 }
+
+/* ✔ Tick List Style */
+.tick-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.tick-list li {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 8px;
+}
+
+.tick-list li::before {
+    content: "✔";
+    color: #28a745;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+

@@ -1,15 +1,20 @@
 <?php
 
+use App\Http\Controllers\Api\AboutPostApiController;
 use App\Http\Controllers\Api\CandidateApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DocumentApiController;
 use App\Http\Controllers\Api\DownloadApiController;
 use App\Http\Controllers\Api\EligibilityApiController;
+use App\Http\Controllers\Api\ForensicApiController;
+use App\Http\Controllers\Api\GeneralInfoApiController;
 use App\Http\Controllers\Api\JobApiController;
 use App\Http\Controllers\Api\JobApplicationApiController;
 use App\Http\Controllers\Api\NfaUserApiController;
 use App\Http\Controllers\Api\NfaUserProfileApiController;
+use App\Http\Controllers\Api\OurServiceApiController;
+use App\Http\Controllers\Api\TrainingAndEducationApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +38,25 @@ Route::get('/jobs', [JobApiController::class, 'index']);
 // Public (Next.js)
 Route::post('nfauser/register', [NfaUserApiController::class, 'register']);
 Route::post('nfauser/login', [NfaUserApiController::class, 'login']);
+Route::get('/about-post-latest', [AboutPostApiController::class, 'latest'])
+    ->middleware('throttle:60,1');
+Route::get('our-services', [OurServiceApiController::class, 'index']);
+Route::get('our-services/latest', [OurServiceApiController::class, 'latest']);
+Route::get('our-services/{id}', [OurServiceApiController::class, 'show']);
+// forensic post
+Route::get('/forensic-posts', [ForensicApiController::class, 'index']);
+Route::get('/forensic-posts/latest', [ForensicApiController::class, 'latest']);
+Route::get('/forensic-posts/{id}', [ForensicApiController::class, 'show']);
+
+
+Route::get('/trainingandeducation', [TrainingAndEducationApiController::class, 'index']); // all posts
+Route::get('/trainingandeducation/latest', [TrainingAndEducationApiController::class, 'latest']); // latest post
+Route::get('/trainingandeducation/{id}', [TrainingAndEducationApiController::class, 'show']); // single post
+
+
+
+Route::get('/general-info', [GeneralInfoApiController::class, 'latest']);
+
 
 Route::middleware('auth:sanctum')->group(function () {
     // Logged-in user ka profile fetch
@@ -42,9 +66,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('nfauser/profile', [NfaUserProfileApiController::class, 'saveProfile']);
     Route::get('/check-eligibility', [EligibilityApiController::class, 'checkEligibility']);
     Route::post('/submit-application', [JobApplicationApiController::class, 'submit']);
-      Route::get(
+    Route::get(
         'applications/myapplications',
         [JobApplicationApiController::class, 'myApplications']
     );
 });
-
