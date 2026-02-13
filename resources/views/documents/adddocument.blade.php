@@ -2,6 +2,24 @@
 
 @section('main-content')
 <div class="container-fluid">
+    {{-- SUCCESS MESSAGE --}}
+@if(session('success'))
+    <div id="success-alert" class="alert alert-success alert-dismissible fade show">
+        {{ session('success') }}
+    </div>
+@endif
+
+{{-- ERROR MESSAGE --}}
+@if($errors->any())
+    <div id="error-alert" class="alert alert-danger alert-dismissible fade show">
+        <ul class="mb-0 mt-1">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
     <div class="card shadow-lg border-0">
         <div class="card-header my-sidebar-class text-white">
             <h4 class="mb-0">Upload New Document</h4>

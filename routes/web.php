@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AboutPageController;
 use App\Http\Controllers\AboutPostController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -12,7 +13,9 @@ use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\JobListingController;
 use App\Http\Controllers\NfaUserController;
 use App\Http\Controllers\OurServicesController;
+use App\Http\Controllers\TenderController;
 use App\Http\Controllers\TrainingAndEducationController;
+use App\Http\Controllers\VisionController;
 
 // Public routes → guest.custom middleware
 Route::middleware('guest.custom:custom')->group(function () {
@@ -97,6 +100,7 @@ Route::middleware('auth:custom')->group(function () {
         Route::get('/{id}', [TrainingAndEducationController::class, 'show'])->name('training.show');
         Route::delete('/{id}', [TrainingAndEducationController::class, 'destroy'])->name('training.destroy');
     });
+
     Route::prefix('services')->group(function () {
         // Show all services + form
         Route::get('/', [OurServicesController::class, 'index'])->name('services.index');
@@ -125,13 +129,39 @@ Route::middleware('auth:custom')->group(function () {
             return response()->json(['success' => true]);
         });
     });
+    // general info routes
     Route::prefix('general-info')->group(function () {
-    Route::get('/', [GeneralInfoController::class, 'index'])->name('generalinfo.index');
-    Route::post('/store', [GeneralInfoController::class, 'store'])->name('generalinfo.store');
-    Route::get('/edit/{id}', [GeneralInfoController::class, 'edit'])->name('generalinfo.edit');
-    Route::post('/update/{id}', [GeneralInfoController::class, 'update'])->name('generalinfo.update');
-    Route::delete('/delete/{id}', [GeneralInfoController::class, 'destroy'])->name('generalinfo.delete');
-});
+        Route::get('/', [GeneralInfoController::class, 'index'])->name('generalinfo.index');
+        Route::post('/store', [GeneralInfoController::class, 'store'])->name('generalinfo.store');
+        Route::get('/edit/{id}', [GeneralInfoController::class, 'edit'])->name('generalinfo.edit');
+        Route::post('/update/{id}', [GeneralInfoController::class, 'update'])->name('generalinfo.update');
+        Route::delete('/delete/{id}', [GeneralInfoController::class, 'destroy'])->name('generalinfo.delete');
+    });
+    // vision page routes
+    Route::prefix('vision')->group(function () {
+        Route::get('/', [VisionController::class, 'index'])->name('vision.index');
+        Route::post('/', [VisionController::class, 'store'])->name('vision.store');
+        Route::get('/{id}', [VisionController::class, 'show']);
+        Route::get('/{id}/edit', [VisionController::class, 'edit'])->name('vision.edit');
+        Route::put('/{id}', [VisionController::class, 'update'])->name('vision.update');
+        Route::delete('/{id}', [VisionController::class, 'destroy'])->name('vision.destroy');
+    });
+    // about page routes
+    Route::get('/about-page', [AboutPageController::class, 'index'])->name('about.page.index');
+    Route::post('/about-page', [AboutPageController::class, 'store'])->name('about.page.store');
+    Route::get('/about-page/{id}', [AboutPageController::class, 'show']);
+    Route::delete('/about-page/{id}', [AboutPageController::class, 'destroy']);
+    // tender page routes
+    Route::get('/tenders/add', [TenderController::class, 'index'])->name('tenders.add');
+    Route::post('/tenders/store', [TenderController::class, 'store'])->name('tenders.store');
+    Route::get('/tenders', [TenderController::class, 'show'])->name('tenders.show');
+    Route::get('/tenders/view/{id}', [TenderController::class, 'view'])->name('tenders.view');
+    Route::delete('/tenders/delete/{id}', [TenderController::class, 'destroy'])->name('tenders.delete');
+    Route::put('/tenders/status/{id}', [TenderController::class, 'updateStatus'])->name('tenders.status');
+
+
+
+
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

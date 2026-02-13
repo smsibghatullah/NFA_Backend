@@ -8,8 +8,11 @@ use Illuminate\Http\Request;
 
 class TrainingAndEducationApiController extends Controller
 {
-    public function index()
+    // GET: all posts
+    public function index(Request $request)
     {
+        $this->validateApiKey($request);
+
         $posts = TrainingAndEducation::latest()->get();
 
         return response()->json([
@@ -18,8 +21,11 @@ class TrainingAndEducationApiController extends Controller
         ], 200);
     }
 
-    public function show($id)
+    // GET: single post
+    public function show(Request $request, $id)
     {
+        $this->validateApiKey($request);
+
         $post = TrainingAndEducation::find($id);
 
         if (!$post) {
@@ -35,8 +41,11 @@ class TrainingAndEducationApiController extends Controller
         ], 200);
     }
 
-    public function latest()
+    // GET: latest post
+    public function latest(Request $request)
     {
+        $this->validateApiKey($request);
+
         $post = TrainingAndEducation::orderBy('id', 'desc')->first();
 
         if (!$post) {
@@ -58,4 +67,19 @@ class TrainingAndEducationApiController extends Controller
             ]
         ], 200);
     }
+
+    // ✅ API key validation helper
+        private function validateApiKey(Request $request)
+{
+    // Get key from query param or Authorization header
+    $key = $request->query('api_key') 
+           ?? str_replace('Bearer ', '', $request->header('Authorization'));
+
+    if (!$key || $key !== env('GENERAL_API_KEY')) {
+        abort(response()->json([
+            'status' => false,
+            'message' => 'Unauthorized: Invalid API key'
+        ], 401));
+    }
+}
 }

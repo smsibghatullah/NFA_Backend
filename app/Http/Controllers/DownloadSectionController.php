@@ -15,8 +15,8 @@ class DownloadSectionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'download_name' => 'required|string|max:255',
-            'download_file' => 'required|mimes:pdf|max:2048',
+            'download_name' => 'required|string',
+            'download_file' => 'required|mimes:pdf,doc,docx',
         ]);
 
         $file = $request->file('download_file');

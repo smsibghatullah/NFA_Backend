@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -7,27 +8,32 @@ use App\Models\Document;
 
 class DocumentApiController extends Controller
 {
-  public function index()
-{
-    $documents = Document::latest()->get()->map(function ($doc) {
-        return [
-            'id' => $doc->id,
-            'name' => $doc->name,
-            'file' => $doc->file,
-            'file_url' => asset('uploads/documents/' . $doc->file),
-            'created_at' => $doc->created_at,
-        ];
-    });
+    // ✅ List documents with API key check
+    public function index(Request $request)
+    {
+        $this->validateApiKey($request);
 
-    return response()->json([
-        'status' => true,
-        'documents' => $documents
-    ]);
-}
+        $documents = Document::latest()->get()->map(function ($doc) {
+            return [
+                'id' => $doc->id,
+                'name' => $doc->name,
+                'file' => $doc->file,
+                'file_url' => asset('uploads/documents/' . $doc->file),
+                'created_at' => $doc->created_at,
+            ];
+        });
 
+        return response()->json([
+            'status' => true,
+            'documents' => $documents
+        ]);
+    }
 
+    // ✅ Store document with API key check
     public function store(Request $request)
     {
+        $this->validateApiKey($request);
+
         $request->validate([
             'name' => 'required|string|max:255',
             'file' => 'required|mimes:pdf|max:2048',
@@ -49,8 +55,11 @@ class DocumentApiController extends Controller
         ], 201);
     }
 
-    public function show($id)
+    // ✅ Show single document with API key check
+    public function show(Request $request, $id)
     {
+        $this->validateApiKey($request);
+
         $doc = Document::findOrFail($id);
 
         return response()->json([
@@ -59,4 +68,21 @@ class DocumentApiController extends Controller
             'file_url' => asset('uploads/documents/'.$doc->file)
         ]);
     }
+
+    // ✅ API key validation helper
+    // ✅ API key validation helper
+private function validateApiKey(Request $request)
+{
+    // Get key from query param or Authorization header
+    $key = $request->query('api_key') 
+           ?? str_replace('Bearer ', '', $request->header('Authorization'));
+
+    if (!$key || $key !== env('GENERAL_API_KEY')) {
+        abort(response()->json([
+            'status' => false,
+            'message' => 'Unauthorized: Invalid API key'
+        ], 401));
+    }
+}
+
 }

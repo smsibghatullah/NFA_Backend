@@ -9,8 +9,10 @@ use App\Models\ForensicPost;
 class ForensicApiController extends Controller
 {
     // ✅ Public view API (all forensic posts)
-    public function index()
+    public function index(Request $request)
     {
+        $this->validateApiKey($request);
+
         $posts = ForensicPost::latest()->get()->map(function ($post) {
             return [
                 'id' => $post->id,
@@ -29,8 +31,10 @@ class ForensicApiController extends Controller
     }
 
     // ✅ Single forensic post
-    public function show($id)
+    public function show(Request $request, $id)
     {
+        $this->validateApiKey($request);
+
         $post = ForensicPost::find($id);
 
         if (!$post) {
@@ -54,8 +58,10 @@ class ForensicApiController extends Controller
     }
 
     // ✅ Latest forensic post
-    public function latest()
+    public function latest(Request $request)
     {
+        $this->validateApiKey($request);
+
         $post = ForensicPost::latest()->first();
 
         if (!$post) {
@@ -77,4 +83,19 @@ class ForensicApiController extends Controller
             ]
         ], 200);
     }
+
+    // ✅ API key validation helper
+    private function validateApiKey(Request $request)
+{
+    // Get key from query param or Authorization header
+    $key = $request->query('api_key') 
+           ?? str_replace('Bearer ', '', $request->header('Authorization'));
+
+    if (!$key || $key !== env('GENERAL_API_KEY')) {
+        abort(response()->json([
+            'status' => false,
+            'message' => 'Unauthorized: Invalid API key'
+        ], 401));
+    }
+}
 }

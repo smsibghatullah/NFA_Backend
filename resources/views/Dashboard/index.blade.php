@@ -171,30 +171,7 @@
 
 
             </li>
-            <li class="nav-item ">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-file-download"></i>
-                <p>
-                  Download Section
-                  <i class="right fas fa-angle-left"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="{{ route('downloads.add') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Add Download</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{ route('downloads.show') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>View Downloads</p>
-                  </a>
-                </li>
-              </ul>
 
-            </li>
             <li class="nav-item ">
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-clipboard-list"></i>
@@ -245,34 +222,6 @@
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-file-alt"></i>
                 <p>
-                  Document Section
-                  <i class="right fas fa-angle-left"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="{{ route('documents.add') }}"
-                    class="nav-link {{ request()->routeIs('documents.add') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Add Document</p>
-                  </a>
-                </li>
-
-                <li class="nav-item">
-                  <a href="{{ route('documents.show') }}"
-                    class="nav-link {{ request()->routeIs('documents.show') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>View Documents</p>
-                  </a>
-                </li>
-
-
-              </ul>
-            </li>
-            <li class="nav-item ">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-file-alt"></i>
-                <p>
                   Posts Section
                   <i class="right fas fa-angle-left"></i>
                 </p>
@@ -310,6 +259,111 @@
 
               </ul>
             </li>
+            <li class="nav-item ">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-file-alt"></i>
+                <p>
+                  Pages Section
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{{ route('vision.index') }}"
+                    class="nav-link {{ request()->routeIs('vision.index') ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Vision Page</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{ route('about.page.index') }}"
+                    class="nav-link {{ request()->routeIs('about.page.index') ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>About Page</p>
+                  </a>
+                </li>
+                <li class="nav-item ">
+                  <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-file-alt"></i>
+                    <p>
+                      Career page
+                      <i class="right fas fa-angle-left"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                      <a href="{{ route('documents.add') }}"
+                        class="nav-link {{ request()->routeIs('documents.add') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Add Document</p>
+                      </a>
+                    </li>
+
+                    <li class="nav-item">
+                      <a href="{{ route('documents.show') }}"
+                        class="nav-link {{ request()->routeIs('documents.show') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>View Documents</p>
+                      </a>
+                    </li>
+
+
+                  </ul>
+                </li>
+                <li class="nav-item ">
+                  <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-file-download"></i>
+                    <p>
+                      Download Page
+                      <i class="right fas fa-angle-left"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                      <a href="{{ route('downloads.add') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Add Download</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{{ route('downloads.show') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>View Downloads</p>
+                      </a>
+                    </li>
+                  </ul>
+
+                </li>
+                <li class="nav-item ">
+                  <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-file-contract"></i>
+                    <p>
+                      Tenders Page
+                      <i class="right fas fa-angle-left"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                      <a href="{{ route('tenders.add') }}"
+                        class="nav-link {{ request()->routeIs('tenders.add') ? 'active' : '' }}">
+
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Add Tender</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{{ route('tenders.show') }}"
+                        class="nav-link {{ request()->routeIs('tenders.show') ? 'active' : '' }}">
+
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>View Tenders</p>
+                      </a>
+                    </li>
+                  </ul>
+
+                </li>
+              </ul>
+            </li>
           </ul>
         </nav>
         <!-- /.sidebar-menu -->
@@ -338,7 +392,7 @@
       <!-- Main content -->
       <section class="content">
         <div class="container-fluid">
-          
+
           <!-- /.row -->
           <!-- Main row -->
           <div class="row">
